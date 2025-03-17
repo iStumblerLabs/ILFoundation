@@ -11,44 +11,44 @@
 // MARK: - Message Digests
 
 - (NSData*) md2 {
-    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashMD2];
+    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashingFunctionMD2];
     return hashingStream.readToEndAndHash;
 }
 
 - (NSData*) md4 {
-    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashMD4];
+    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashingFunctionMD4];
     return hashingStream.readToEndAndHash;
 }
 
 - (NSData*) md5 {
-    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashMD5];
+    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashingFunctionMD5];
     return hashingStream.readToEndAndHash;
 }
 
 // MARK: - Secure Hash Algorithms
 
 - (NSData*) sha1 {
-    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashSHA1];
+    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashingFunctionSHA1];
     return hashingStream.readToEndAndHash;
 }
 
 - (NSData*) sha2_224 {
-    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashSHA2_224];
+    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashingFunctionSHA2_224];
     return hashingStream.readToEndAndHash;
 }
 
 - (NSData*) sha2_256 {
-    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashSHA2_256];
+    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashingFunctionSHA2_256];
     return hashingStream.readToEndAndHash;
 }
 
 - (NSData*) sha2_384 {
-    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashSHA2_384];
+    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashingFunctionSHA2_384];
     return hashingStream.readToEndAndHash;
 }
 
 - (NSData*) sha2_512 {
-    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashSHA2_512];
+    ILHashingInputStream* hashingStream = [ILHashingInputStream.alloc initWithInputStream:self hashFunction:ILHashingFunctionSHA2_512];
     return hashingStream.readToEndAndHash;
 }
 
@@ -88,14 +88,14 @@ typedef struct {
     size_t contextSize = 0;
 
     switch (function) {
-        case ILHashMD2:         contextSize = sizeof(CC_MD2_CTX); break;
-        case ILHashMD4:         contextSize = sizeof(CC_MD4_CTX); break;
-        case ILHashMD5:         contextSize = sizeof(CC_MD5_CTX); break;
-        case ILHashSHA1:        contextSize = sizeof(CC_SHA1_CTX); break;
-        case ILHashSHA2_224:    contextSize = sizeof(CC_SHA256_CTX); break;
-        case ILHashSHA2_256:    contextSize = sizeof(CC_SHA256_CTX); break;
-        case ILHashSHA2_384:    contextSize = sizeof(CC_SHA512_CTX); break;
-        case ILHashSHA2_512:    contextSize = sizeof(CC_SHA512_CTX); break;
+        case ILHashingFunctionMD2:         contextSize = sizeof(CC_MD2_CTX); break;
+        case ILHashingFunctionMD4:         contextSize = sizeof(CC_MD4_CTX); break;
+        case ILHashingFunctionMD5:         contextSize = sizeof(CC_MD5_CTX); break;
+        case ILHashingFunctionSHA1:        contextSize = sizeof(CC_SHA1_CTX); break;
+        case ILHashingFunctionSHA2_224:    contextSize = sizeof(CC_SHA256_CTX); break;
+        case ILHashingFunctionSHA2_256:    contextSize = sizeof(CC_SHA256_CTX); break;
+        case ILHashingFunctionSHA2_384:    contextSize = sizeof(CC_SHA512_CTX); break;
+        case ILHashingFunctionSHA2_512:    contextSize = sizeof(CC_SHA512_CTX); break;
     }
 
     data = [NSMutableData dataWithLength:contextSize];
@@ -108,14 +108,14 @@ typedef struct {
     size_t digestSize = 0;
 
     switch (function) {
-        case ILHashMD2:         digestSize = CC_MD2_DIGEST_LENGTH; break;
-        case ILHashMD4:         digestSize = CC_MD4_DIGEST_LENGTH; break;
-        case ILHashMD5:         digestSize = CC_MD5_DIGEST_LENGTH; break;
-        case ILHashSHA1:        digestSize = CC_SHA1_DIGEST_LENGTH; break;
-        case ILHashSHA2_224:    digestSize = CC_SHA224_DIGEST_LENGTH; break;
-        case ILHashSHA2_256:    digestSize = CC_SHA256_DIGEST_LENGTH; break;
-        case ILHashSHA2_384:    digestSize = CC_SHA384_DIGEST_LENGTH; break;
-        case ILHashSHA2_512:    digestSize = CC_SHA512_DIGEST_LENGTH; break;
+        case ILHashingFunctionMD2:         digestSize = CC_MD2_DIGEST_LENGTH; break;
+        case ILHashingFunctionMD4:         digestSize = CC_MD4_DIGEST_LENGTH; break;
+        case ILHashingFunctionMD5:         digestSize = CC_MD5_DIGEST_LENGTH; break;
+        case ILHashingFunctionSHA1:        digestSize = CC_SHA1_DIGEST_LENGTH; break;
+        case ILHashingFunctionSHA2_224:    digestSize = CC_SHA224_DIGEST_LENGTH; break;
+        case ILHashingFunctionSHA2_256:    digestSize = CC_SHA256_DIGEST_LENGTH; break;
+        case ILHashingFunctionSHA2_384:    digestSize = CC_SHA384_DIGEST_LENGTH; break;
+        case ILHashingFunctionSHA2_512:    digestSize = CC_SHA512_DIGEST_LENGTH; break;
     }
 
     digest = [NSMutableData dataWithLength:digestSize];
@@ -128,7 +128,7 @@ typedef struct {
     impl.initialized = YES;
 
     switch (function) {
-        case ILHashMD2: {
+        case ILHashingFunctionMD2: {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             impl.hashInitFunction = (int(*)(void*))CC_MD2_Init;
@@ -137,7 +137,7 @@ typedef struct {
 #pragma clang diagnostic pop
             break;
         }
-        case ILHashMD4: {
+        case ILHashingFunctionMD4: {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             impl.hashInitFunction = (int(*)(void*))CC_MD4_Init;
@@ -146,7 +146,7 @@ typedef struct {
 #pragma clang diagnostic pop
             break;
         }
-        case ILHashMD5: {
+        case ILHashingFunctionMD5: {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             impl.hashInitFunction = (int(*)(void*))CC_MD5_Init;
@@ -155,31 +155,31 @@ typedef struct {
 #pragma clang diagnostic pop
             break;
         }
-        case ILHashSHA1: {
+        case ILHashingFunctionSHA1: {
             impl.hashInitFunction = (int(*)(void*))CC_SHA1_Init;
             impl.hashUpdateFunction = (int(*)(void*,const void*,CC_LONG))CC_SHA1_Update;
             impl.hashFinalFunction = (int(*)(unsigned char*, void*))CC_SHA1_Final;
             break;
         }
-        case ILHashSHA2_224 : {
+        case ILHashingFunctionSHA2_224 : {
             impl.hashInitFunction = (int(*)(void*))CC_SHA224_Init;
             impl.hashUpdateFunction = (int(*)(void*,const void*,CC_LONG))CC_SHA224_Update;
             impl.hashFinalFunction = (int(*)(unsigned char*, void*))CC_SHA224_Final;
             break;
         }
-        case ILHashSHA2_256: {
+        case ILHashingFunctionSHA2_256: {
             impl.hashInitFunction = (int(*)(void*))CC_SHA256_Init;
             impl.hashUpdateFunction = (int(*)(void*,const void*,CC_LONG))CC_SHA256_Update;
             impl.hashFinalFunction = (int(*)(unsigned char*, void*))CC_SHA256_Final;
             break;
         }
-        case ILHashSHA2_384: {
+        case ILHashingFunctionSHA2_384: {
             impl.hashInitFunction = (int(*)(void*))CC_SHA384_Init;
             impl.hashUpdateFunction = (int(*)(void*,const void*,CC_LONG))CC_SHA384_Update;
             impl.hashFinalFunction = (int(*)(unsigned char*, void*))CC_SHA384_Final;
             break;
         }
-        case ILHashSHA2_512: {
+        case ILHashingFunctionSHA2_512: {
             impl.hashInitFunction = (int(*)(void*))CC_SHA512_Init;
             impl.hashUpdateFunction = (int(*)(void*,const void*,CC_LONG))CC_SHA512_Update;
             impl.hashFinalFunction = (int(*)(unsigned char*, void*))CC_SHA512_Final;

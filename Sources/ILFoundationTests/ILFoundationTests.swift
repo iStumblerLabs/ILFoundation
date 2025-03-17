@@ -162,7 +162,7 @@ final class ILFoundationTests: XCTestCase {
 
     func testMD2ILHashingInputStream() throws {
         // create the hashing stream
-        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:ILHashMD2)
+        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:.MD2)
         let streamHash = testStream.readToEndAndHash()
 
         XCTAssertEqual(streamHash!.hexString, md2QuickHash, "")
@@ -170,7 +170,7 @@ final class ILFoundationTests: XCTestCase {
 
     func testMD4ILHashingInputStream() throws {
         // create a stream with some test data in it and then create the hashing stream
-        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:ILHashMD4)
+        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:.MD4)
         let streamHash = testStream.readToEndAndHash()
 
         XCTAssertEqual(streamHash!.hexString, md4QuickHash, "")
@@ -178,7 +178,7 @@ final class ILFoundationTests: XCTestCase {
 
     func testMD5ILHashingInputStream() throws {
         // create a stream with some test data in it and then create the hashing stream
-        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:ILHashMD5)
+        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:.MD5)
         let streamHash = testStream.readToEndAndHash()
 
         XCTAssertEqual(streamHash!.hexString, md5QuickHash, "")
@@ -186,7 +186,7 @@ final class ILFoundationTests: XCTestCase {
 
     func testSHA1ILHashingInputStream() throws {
         // create a stream with some test data in it and then create the hashing stream
-        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:ILHashSHA1)
+        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:.SHA1)
         let streamHash = testStream.readToEndAndHash()
 
         XCTAssertEqual(streamHash!.hexString, sha1QuickHash, "")
@@ -194,7 +194,7 @@ final class ILFoundationTests: XCTestCase {
 
     func testSHA2_224ILHashingInputStream() throws {
         // create a stream with some test data in it and then create the hashing stream
-        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:ILHashSHA2_224)
+        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:.SHA2_224)
         let streamHash = testStream.readToEndAndHash()
 
         XCTAssertEqual(streamHash!.hexString, sha2_224QuickHash, "")
@@ -202,7 +202,7 @@ final class ILFoundationTests: XCTestCase {
 
     func testSHA2_256ILHashingInputStream() throws {
         // create a stream with some test data in it and then create the hashing stream
-        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:ILHashSHA2_256)
+        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:.SHA2_256)
         let streamHash = testStream.readToEndAndHash()
 
         XCTAssertEqual(streamHash!.hexString, sha2_256QuickHash, "")
@@ -210,7 +210,7 @@ final class ILFoundationTests: XCTestCase {
 
     func testSHA2_384ILHashingInputStream() throws {
         // create a stream with some test data in it and then create the hashing stream
-        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:ILHashSHA2_384)
+        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:.SHA2_384)
         let streamHash = testStream.readToEndAndHash()
 
         XCTAssertEqual(streamHash!.hexString, sha2_384QuickHash, "")
@@ -218,7 +218,7 @@ final class ILFoundationTests: XCTestCase {
 
     func testSHA2_512ILHashingInputStream() throws {
         // create a stream with some test data in it and then create the hashing stream
-        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:ILHashSHA2_512)
+        let testStream = ILHashingInputStream(inputStream:InputStream(data: quickBrownData), hashFunction:.SHA2_512)
         let streamHash = testStream.readToEndAndHash()
 
         XCTAssertEqual(streamHash!.hexString, sha2_512QuickHash, "")
@@ -228,14 +228,14 @@ final class ILFoundationTests: XCTestCase {
 
     func testHashingInputStreamStack() throws {
         let inputStream = InputStream(data: quickBrownData)
-        let md2Stream = ILHashingInputStream(inputStream:inputStream, hashFunction:ILHashMD2)
-        let md4Stream = ILHashingInputStream(inputStream:md2Stream, hashFunction:ILHashMD4)
-        let md5Stream = ILHashingInputStream(inputStream:md4Stream, hashFunction:ILHashMD5)
-        let sha1Stream = ILHashingInputStream(inputStream:md5Stream, hashFunction:ILHashSHA1)
-        let sha2_224Stream = ILHashingInputStream(inputStream:sha1Stream, hashFunction:ILHashSHA2_224)
-        let sha2_256Stream = ILHashingInputStream(inputStream:sha2_224Stream, hashFunction:ILHashSHA2_256)
-        let sha2_384Stream = ILHashingInputStream(inputStream:sha2_256Stream, hashFunction:ILHashSHA2_384)
-        let sha2_512Stream = ILHashingInputStream(inputStream:sha2_384Stream, hashFunction:ILHashSHA2_512)
+        let md2Stream = ILHashingInputStream(inputStream:inputStream, hashFunction:.MD2)
+        let md4Stream = ILHashingInputStream(inputStream:md2Stream, hashFunction:.MD4)
+        let md5Stream = ILHashingInputStream(inputStream:md4Stream, hashFunction:.MD5)
+        let sha1Stream = ILHashingInputStream(inputStream:md5Stream, hashFunction:.SHA1)
+        let sha2_224Stream = ILHashingInputStream(inputStream:sha1Stream, hashFunction:.SHA2_224)
+        let sha2_256Stream = ILHashingInputStream(inputStream:sha2_224Stream, hashFunction:.SHA2_256)
+        let sha2_384Stream = ILHashingInputStream(inputStream:sha2_256Stream, hashFunction:.SHA2_384)
+        let sha2_512Stream = ILHashingInputStream(inputStream:sha2_384Stream, hashFunction:.SHA2_512)
 
         // read all the streams up the stack to the end
         sha2_512Stream.readToEndAndHash()

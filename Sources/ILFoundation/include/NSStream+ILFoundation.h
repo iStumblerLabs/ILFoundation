@@ -10,24 +10,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: -
 
-typedef enum {
-    ILHashMD2,
-    ILHashMD4,
-    ILHashMD5,
-    ILHashSHA1,
-    ILHashSHA2_224,
-    ILHashSHA2_256,
-    ILHashSHA2_384,
-    ILHashSHA2_512
-    // TODO: ILHashSHA3_224;
-    // TODO: ILHashSHA3_256;
-    // TODO: ILHashSHA3_384;
-    // TODO: ILHashSHA3_512;
-    // TODO: ILHashSkein_256_256;
-    // TODO: ILHashSkein_512_256;
-    // TODO: ILHashSkein_512_512;
-}
-ILHashingFunction;
+typedef NS_ENUM(NSInteger, ILHashingFunction) {
+    ILHashingFunctionMD2,
+    ILHashingFunctionMD4,
+    ILHashingFunctionMD5,
+    ILHashingFunctionSHA1,
+    ILHashingFunctionSHA2_224,
+    ILHashingFunctionSHA2_256,
+    ILHashingFunctionSHA2_384,
+    ILHashingFunctionSHA2_512
+    // TODO: ILHashingFunctionSHA3_224;
+    // TODO: ILHashingFunctionSHA3_256;
+    // TODO: ILHashingFunctionSHA3_384;
+    // TODO: ILHashingFunctionSHA3_512;
+    // TODO: ILHashingFunctionSkein_256_256;
+    // TODO: ILHashingFunctionSkein_512_256;
+    // TODO: ILHashingFunctionSkein_512_512;
+};
 
 // MARK: -
 
