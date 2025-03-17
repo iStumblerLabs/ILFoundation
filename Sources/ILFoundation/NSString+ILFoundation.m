@@ -161,6 +161,105 @@ NSString* const ILUTF32LEMagic = @"data:;hex,FFFE0000";
     return [self initWithString:[NSString hexStringWithData:data]];
 }
 
+// MARK: - UTF8 Error Detection & Correction
+
+// https://athenstean.com/blog/detecing-fixing-encoding-problems-nsstring/
+
+- (BOOL) containsUTF8Errors {
+    BOOL containsErrors = NO;
+
+    // check for weird character patterns like: Ã„ Ã¤ Ã– Ã¶ Ãœ Ã¼ ÃŸ
+    // We basically check the Basic Latin Unicode page: U+0000 to U+00FF
+    for (int index = 0; index < self.length; ++index) {
+        unichar const charInput = [self characterAtIndex:index];
+        if ((charInput == 0xc2) && (index + 1 < self.length)) {
+            // Check for degree character and similar that are UTF8 but have
+            // incorrectly been translated as Latin1 (ISO 8859-1) or ASCII.
+            unichar const char2Input = [self characterAtIndex:index+1];
+            if ((char2Input >= 0xa0) && (char2Input <= 0xbf)) {
+                containsErrors = true;
+                break;
+            }
+        }
+        if ((charInput == 0xc3) && (index + 1 < self.length)) {
+            // Check for german umlauts and french accents that are UTF8 but have incorrectly
+            // been translated as Latin1 (ISO 8859-1) or ASCII.
+            unichar const char2Input = [self characterAtIndex:index+1];
+            if ((char2Input >= 0x80) && (char2Input <= 0xbf)) {
+                containsErrors = true;
+                break;
+            }
+        }
+    }
+
+    return containsErrors;
+}
+
+- (NSString*) stringByCleaningUTF8Errors {
+    NSMutableString* result = [NSMutableString stringWithCapacity:self.length];
+    NSRange scanRange = NSMakeRange(0, 0);
+    NSString * replacementString = nil;
+    NSUInteger replacementLength = 0;
+
+    // For efficency reasons, don't use replaceOccurrencesOfString but scan
+    // the string ourselves. Each time a problematic character pattern is found,
+    // copy over all characters we have scanned over and then add the replacement.
+    for (int index = 0; index < self.length; ++index) {
+        unichar const charInput = [self characterAtIndex:index];
+
+        if ((charInput == 0xc2) && (index + 1 < self.length)) {
+            unichar const char2Input = [self characterAtIndex:index + 1];
+            if ((char2Input >= 0xa0) && (char2Input <= 0xbf)) {
+                unichar charFixed = char2Input;
+                replacementString = [NSString stringWithFormat:@"%C", charFixed];
+                replacementLength = 2;
+            }
+        }
+
+        if (( charInput == 0xc3) && (index + 1 < self.length)) {
+            // Check for german umlauts and french accents that are UTF8 but have
+            // incorrectly been translated as Latin1 (ISO 8859-1) or ASCII.
+            unichar const char2Input = [self characterAtIndex:index+1];
+
+            if ((char2Input >= 0x80) && (char2Input <= 0xbf)) {
+                unichar charFixed = 0x40 + char2Input;
+                replacementString = [NSString stringWithFormat:@"%C", charFixed];
+                replacementLength = 2;
+            }
+        }
+        else if ((charInput == 0xef) && (index + 2 < self.length)) {
+            // Check for Unicode byte order mark, see:
+            // http://en.wikipedia.org/wiki/Byte_order_mark
+            unichar const char2Input = [self characterAtIndex:index+1];
+            unichar const char3Input = [self characterAtIndex:index+2];
+            if ((char2Input == 0xbb) && (char3Input == 0xbf)) {
+                replacementString = @"";
+                replacementLength = 3;
+            }
+        }
+
+        if (replacementString == nil) {
+            // No pattern detected, just keep scanning the next character.
+            continue;
+        }
+
+        // First, copy over all chars we scanned over but have not copied yet. Then
+        // append the replacement string and update the scan range.
+        scanRange.length = index - scanRange.location;
+        [result appendString:[self substringWithRange:scanRange]];
+        [result appendString:replacementString];
+        scanRange.location = index + replacementLength;
+
+        replacementString = nil;
+    }
+
+    // Copy the rest
+    scanRange.length = self.length - scanRange.location;
+    [result appendString:[self substringWithRange:scanRange]];
+
+    return result;
+}
+
 // MARK: -
 
 - (NSData*) dataWithByteOrderUTFEncoding:(NSStringEncoding)utfEncoding {

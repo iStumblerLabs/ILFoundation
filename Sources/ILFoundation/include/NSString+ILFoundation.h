@@ -25,28 +25,45 @@ extern NSString* const ILUTF32LEMagic;
 
 @interface NSString (ILFoundation)
 
-/// @returns the NSStringEncoding based on the magic number of the data provided or NSStringEncodingUn
+/// @returns the NSStringEncoding based on the magic number of the
+/// @param data provided or NSStringEncodingUn
 + (NSStringEncoding) UTFEncodingOfData:(NSData*) data;
 
-/// @returns a string from any type of UTF data by auto-detecting the encoding
+/// @returns a string from any type of UTF data by auto-detecting the encoding of the
+/// @param data provided
 + (NSString*) stringWithUTFData:(NSData*) data;
 
-/// @returns a hexadecimal string representation of the data
+/// @returns a hexadecimal string representation of the
+/// @param data provided
 + (NSString*) hexStringWithData:(NSData*) data;
 
 // MARK: -
 
+/// @returns a new string by auto-detecting the UTF encoding in the
+/// @param data provided,
 - (instancetype) initWithUTFData:(NSData*) data;
 
+/// @returns a hexstring with the
+/// @param data provided
 - (instancetype) initHexStringWithData:(NSData*) data;
+
+// MARK: - UTF8 Error Detection & Correction
+
+/// @returns YES if any errors are detected in the String
+- (BOOL) containsUTF8Errors;
+
+/// @returns a new string with any UTF8 errors removed
+- (NSString*) stringByCleaningUTF8Errors;
 
 // MARK: -
 
-/// @returns a new data object with the UTF encoding specified including the BOM
-- (NSData*) dataWithByteOrderUTFEncoding:(NSStringEncoding)utfEncoding;
+/// @returns a new data object with the
+/// @param UTFEncoding specified including the BOM
+- (NSData*) dataWithByteOrderUTFEncoding:(NSStringEncoding)UTFEncoding;
 
-/// @returns an array of substrings with a maximum length
-- (NSArray<NSString*>*) linesWithMaxLen:(NSUInteger) maxLen;
+/// @returns an array of substrings with a
+/// @param maximum length
+- (NSArray<NSString*>*) linesWithMaxLen:(NSUInteger) maximum;
 
 @end
 

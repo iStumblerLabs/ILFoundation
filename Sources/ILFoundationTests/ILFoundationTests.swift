@@ -441,6 +441,19 @@ final class ILFoundationTests: XCTestCase {
         XCTAssertNotNil(decoded, "utf32LEData decoded is not nil")
     }
 
+    // MARK: - UTF8 Error Detection and Correction
+
+    func testUTF8ErrorDetection() throws {
+        let encodingErrors: NSString = "Ã„ Ã¤ Ã– Ã¶ Ãœ Ã¼ ÃŸ"
+        XCTAssert(encodingErrors.containsUTF8Errors(), "encodingErrors contains errors")
+    }
+
+    func testUTF8ErrorCorrection() throws {
+        let encodingErrors: NSString = "Ã„ Ã¤ Ã– Ã¶ Ãœ Ã¼ ÃŸ"
+        let cleanedString: NSString = (encodingErrors as NSString).cleaningUTF8Errors() as NSString
+        XCTAssert(!cleanedString.containsUTF8Errors(), "cleanedString has no errors")
+    }
+
     // MARK: -
 
     func testLinesWithMaxLength() throws {
