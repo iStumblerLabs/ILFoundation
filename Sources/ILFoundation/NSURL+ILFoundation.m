@@ -47,11 +47,312 @@ NSString* const ILDataURLBase64Encoding = @"base64";
     return [NSURL URLWithString:dataURL];
 }
 
+// MARK: - Data X-Type URLs
+
++ (NSURL*) dataURLWithDate:(NSDate*) date {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/epoch-seconds,%f", date.timeIntervalSince1970]];
+}
+
++ (nullable NSDate*) dateWithDataURL:(NSURL*) url {
+    NSDate* date = nil;
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+
+        if ([contentEncoding isEqualToString:@"x-type/epoch-seconds"]) {
+            // read date as floating point value
+            double dateValue = 0;
+            [URIscanner scanDouble:&dateValue];
+
+            date = [NSDate dateWithTimeIntervalSince1970:dateValue];
+        }
+    }
+
+    return date;
+}
+
++ (NSURL*) dataURLWithDate:(NSDate*) date interval:(NSTimeInterval) interval {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/epoch-interval,%f,%f", date.timeIntervalSince1970, interval]];
+}
+
++ (nullable NSDate*) dateWithDataURL:(NSURL*) url interval:(NSTimeInterval*) interval {
+    NSDate* date = nil;
+
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+
+        if ([contentEncoding isEqualToString:@"x-type/epoch-interval"]) {
+            // read date as floating point value
+            double dateValue = 0;
+            [URIscanner scanDouble:&dateValue];
+            [URIscanner scanString:@"," intoString:nil];
+            date = [NSDate dateWithTimeIntervalSince1970:dateValue];
+
+            // read interval as floating point value
+            [URIscanner scanDouble:interval];
+        }
+    }
+
+    return date;
+}
+
+// MARK: -
+
++ (NSURL*) dataURLWithPoint:(CGPoint) point {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/point,%f,%f", point.x, point.y]];
+}
+
+/// @returns the `CGPoint` from an RFC 2397 `data:`
+/// @param url with an `x-type/point` content type;
+/// or `NSZeroPoint`
++ (NSPoint) pointWithDataURL:(NSURL*) url {
+    NSPoint point = NSZeroPoint;
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+        // read point as floating point value
+        double x = 0;
+        double y = 0;
+        [URIscanner scanDouble:&x];
+        [URIscanner scanString:@"," intoString:nil];
+        [URIscanner scanDouble:&y];
+        point = NSMakePoint(x, y);
+    }
+
+    return point;
+}
+
++ (NSURL*) dataURLWithSize:(CGSize) size {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/size,%f,%f", size.width, size.height]];
+}
+
++ (CGSize) sizeWithDataURL:(NSURL*) url {
+    CGSize size = CGSizeZero;
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+        // read size as floating point value
+        double width = 0;
+        double height = 0;
+        [URIscanner scanDouble:&width];
+        [URIscanner scanString:@"," intoString:nil];
+        [URIscanner scanDouble:&height];
+        size = CGSizeMake(width, height);
+    }
+
+    return size;
+}
+
++ (NSURL*) dataURLWithRect:(CGRect) rect {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/rect,%f,%f,%f,%f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height]];
+}
+
++ (CGRect) rectWithDataURL:(NSURL*) url {
+    CGRect rect = CGRectZero;
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+        // read rect as floating point value
+        double x = 0;
+        double y = 0;
+        double width = 0;
+        double height = 0;
+        [URIscanner scanDouble:&x];
+        [URIscanner scanString:@"," intoString:nil];
+        [URIscanner scanDouble:&y];
+        [URIscanner scanString:@"," intoString:nil];
+        [URIscanner scanDouble:&width];
+        [URIscanner scanString:@"," intoString:nil];
+        [URIscanner scanDouble:&height];
+        rect = CGRectMake(x, y, width, height);
+    }
+
+    return rect;
+}
+
++ (NSURL*) dataURLWithRange:(NSRange) range {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/range,%lu,%lu", (unsigned long)range.location, (unsigned long)range.length]];
+}
+
++ (NSRange) rangeWithDataURL:(NSURL*) url {
+    NSRange range = NSMakeRange(0, 0);
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+
+        if ([contentEncoding isEqualToString:@"x-type/range"]) {
+            // read range as integer value
+            NSUInteger location = 0;
+            NSUInteger length = 0;
+            [URIscanner scanInteger:(NSInteger*)&location];
+            [URIscanner scanString:@"," intoString:nil];
+            [URIscanner scanInteger:(NSInteger*)&length];
+            range = NSMakeRange(location, length);
+        }
+    }
+
+    return range;
+}
+
++ (NSURL*) dataURLWithVector:(CGVector)vector {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/vector,%f,%f", vector.dx, vector.dy]];
+}
+
++ (CGVector) vectorWithDataURL:(NSURL *)url {
+    CGVector vector = CGVectorMake(0, 0);
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+
+        if ([contentEncoding isEqualToString:@"x-type/vector"]) {
+            // read vector as floating point value
+            double dx = 0;
+            double dy = 0;
+            [URIscanner scanDouble:&dx];
+            [URIscanner scanString:@"," intoString:nil];
+            [URIscanner scanDouble:&dy];
+            vector = CGVectorMake(dx, dy);
+        }
+    }
+
+    return vector;
+}
+
+// MARK: -
+
+/// @returns an RFC 2397 `data:` URL with the provided
+/// @param measure as an `x-type/measure` two tupe with the value and unit values
+/// e.g. `data:x-type/measure,100,cm`
++ (NSURL*) dataURLWithMeasurement:(NSMeasurement*) measure {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/measure,%f,%@", measure.doubleValue, measure.unit.symbol]];
+}
+
+/// @returns an `NSMeasurement` from an RFC 2397 `data:`
+/// @param url with an `x-type/measure` content type;
+/// or nil
++ (nullable NSMeasurement*) measurementWithDataURL:(NSURL*) url {
+    NSMeasurement* measure = nil;
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+
+        if ([contentEncoding isEqualToString:@"x-type/measure"]) {
+            // read measure as floating point value
+            double value = 0;
+            NSString* unit = nil;
+            [URIscanner scanDouble:&value];
+            [URIscanner scanString:@"," intoString:nil];
+            [URIscanner scanUpToString:@"" intoString:&unit];
+            measure = [NSMeasurement.alloc initWithDoubleValue:value unit:[NSUnit.alloc initWithSymbol:unit]];
+        }
+    }
+
+    return measure;
+}
+
++ (NSURL*) dataURLWithRegex:(NSRegularExpression*) regex {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"data:x-type/regex,%@", regex.pattern]];
+}
+
++ (nullable NSRegularExpression*) regexWithDataURL:(NSURL*) url {
+    NSRegularExpression* regex = nil;
+
+    if ([url.scheme isEqualToString:ILDataURLScheme]) {
+        NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
+        NSString* contentEncoding = nil;
+        // scan up to scheme separator
+        [URIscanner scanUpToString:@":" intoString:nil];
+        [URIscanner scanString:@":" intoString:nil];
+        // scan up to data separator
+        [URIscanner scanUpToString:@"," intoString:&contentEncoding];
+        [URIscanner scanString:@"," intoString:nil];
+
+        if ([contentEncoding isEqualToString:@"x-type/regex"]) {
+            // read regex as string value
+            NSString* pattern = nil;
+            [URIscanner scanUpToString:@"" intoString:&pattern];
+            regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+        }
+    }
+
+    return regex;
+}
+
+// MARK: - URNs
+
++ (NSURL*) URNWithUUID:(NSUUID*) uuid {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"urn:uuid:%@", uuid.UUIDString]];
+}
+
++ (NSUUID*) UUIDWithURL:(NSURL*) uuidURN {
+    NSUUID* uuid = nil;
+
+    NSArray* urnComponents = [uuidURN.absoluteString componentsSeparatedByString:@":"];
+    if (urnComponents.count == 3
+    && [urnComponents[0] isEqualToString:@"urn"]
+    && [urnComponents[1] isEqualToString:@"uuid"]) {
+        uuid = [NSUUID.alloc initWithUUIDString:urnComponents[2]];
+    }
+
+    return uuid;
+}
+
+// MARK: - UTType Data URLs
+
 + (NSURL*) URLWithUTTypeData:(NSData*)UTTypeData {
     NSURL* dataURL = nil;
-#if IL_APP_KIT
+#if TARGET_OS_MAC
     dataURL = [NSURL URLWithDataRepresentation:UTTypeData relativeToURL:nil];
-#elif IL_UI_KIT
+#elif TARGET_OS_IOS
     NSPropertyListFormat plistFormat;
     NSError* plistError = nil;
     id plist = [NSPropertyListSerialization propertyListWithData:UTTypeData

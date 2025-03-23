@@ -363,6 +363,99 @@ final class ILFoundationTests: XCTestCase {
         XCTAssert(testData!.elementsEqual("the data:1234,5678".data(using: String.Encoding.utf8)!))
     }
 
+    // MARK: - Data X-Type URL Tests
+
+    func testDataURLWithDate() throws {
+        let testDate = Date()
+        let dateURL = NSURL.dataURL(with: testDate)
+        XCTAssertNotNil(dateURL, "dateURL is not nil")
+        XCTAssert(dateURL.absoluteString.hasPrefix("data:"), "dateURL is a data URL")
+
+        let dataDate = NSURL.date(withDataURL: dateURL)!
+        XCTAssertNotNil(dataDate, "dataDate is not nil")
+        XCTAssert(testDate.timeIntervalSince(dataDate) < 0.001, "dataDate is within 1ms of testDate")
+    }
+
+    func testDataURLWithInterval() throws {
+        let testDate = Date()
+        let testInterval = TimeInterval(12345)
+        let intervalURL = NSURL.dataURL(with:testDate, interval:testInterval)
+        XCTAssertNotNil(intervalURL, "intervalURL is not nil")
+        XCTAssert(intervalURL.absoluteString.hasPrefix("data:"), "intervalURL is a data URL")
+
+        var dataInterval = 0.0
+        let dataDate = NSURL.date(withDataURL: intervalURL, interval: &dataInterval)!
+        XCTAssertNotNil(dataDate, "dataDate is not nil")
+        XCTAssert(testDate.timeIntervalSince(dataDate) < 0.001, "dataDate is within 1ms of testDate")
+        XCTAssert((dataInterval - testInterval) < 0.001, "dataInterval is within 1ms of testInterval")
+    }
+
+    func testDataURLWithPoint() {
+        let testPoint = CGPoint(x: 123.456, y: 789.012)
+        let pointURL = NSURL.dataURL(with: testPoint)
+        XCTAssertNotNil(pointURL, "pointURL is not nil")
+        XCTAssert(pointURL.absoluteString.hasPrefix("data:"), "pointURL is a data URL")
+
+        let dataPoint = NSURL.point(withDataURL: pointURL)
+        XCTAssertNotNil(dataPoint, "dataPoint is not nil")
+        XCTAssertEqual(dataPoint, testPoint, "dataPoint is equal to testPoint")
+    }
+
+    func testDataURLWithSize() {
+        let testSize = CGSize(width: 123.456, height: 789.012)
+        let sizeURL = NSURL.dataURL(with: testSize)
+        XCTAssertNotNil(sizeURL, "sizeURL is not nil")
+        XCTAssert(sizeURL.absoluteString.hasPrefix("data:"), "sizeURL is a data URL")
+
+        let dataSize = NSURL.size(withDataURL: sizeURL)
+        XCTAssertNotNil(dataSize, "dataSize is not nil")
+        XCTAssertEqual(dataSize, testSize, "dataSize is equal to testSize")
+    }
+
+    func testDataURLWithRect() {
+        let testRect = CGRect(x: 123.456, y: 789.012, width: 345.678, height: 901.234)
+        let rectURL = NSURL.dataURL(with: testRect)
+        XCTAssertNotNil(rectURL, "rectURL is not nil")
+        XCTAssert(rectURL.absoluteString.hasPrefix("data:"), "rectURL is a data URL")
+
+        let dataRect = NSURL.rect(withDataURL: rectURL)
+        XCTAssertNotNil(dataRect, "dataRect is not nil")
+        XCTAssertEqual(dataRect, testRect, "dataRect is equal to testRect")
+    }
+
+    func testDataURLWithRange() {
+        let testRange = NSRange(location: 123, length: 456)
+        let rangeURL = NSURL.dataURL(with: testRange)
+        XCTAssertNotNil(rangeURL, "rangeURL is not nil")
+        XCTAssert(rangeURL.absoluteString.hasPrefix("data:"), "rangeURL is a data URL")
+
+        let dataRange = NSURL.range(withDataURL: rangeURL)
+        XCTAssertNotNil(dataRange, "dataRange is not nil")
+        XCTAssertEqual(dataRange, testRange, "dataRange is equal to testRange")
+    }
+
+    func testDataURNWithUUID() {
+        let testUUID = UUID()
+        let uuidURL = NSURL.urn(with: testUUID)
+        XCTAssertNotNil(uuidURL, "uuidURL is not nil")
+        XCTAssert(uuidURL.absoluteString.hasPrefix("urn:"), "uuidURL is a URN URL")
+
+        let dataUUID = NSURL.uuid(with: uuidURL)
+        XCTAssertNotNil(dataUUID, "dataUUID is not nil")
+        XCTAssertEqual(dataUUID, testUUID, "dataUUID is equal to testUUID")
+    }
+
+    /* func testDataURLWithMeasure() {
+        let testMeasure = Measurement(value: 123.456, unit: UnitLength.meters)
+        let measureURL = NSURL.dataURL(with: testMeasure)
+        XCTAssertNotNil(measureURL, "measureURL is not nil")
+        XCTAssert(measureURL.absoluteString.hasPrefix("data:"), "measureURL is a data URL")
+
+        let dataMeasure = NSURL.measurement(withDataURL: measureURL)
+        XCTAssertNotNil(dataMeasure, "dataMeasure is not nil")
+        XCTAssertEqual(dataMeasure, testMeasure, "dataMeasure is equal to testMeasure")
+    } */
+
     // MARK: - UTF Auto-detection Tests
 
     func testUTF8EncodingDetection() throws {
