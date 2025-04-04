@@ -118,8 +118,8 @@ NSString* const ILDataURLBase64Encoding = @"base64";
 /// @returns the `CGPoint` from an RFC 2397 `data:`
 /// @param url with an `x-type/point` content type;
 /// or `NSZeroPoint`
-+ (NSPoint) pointWithDataURL:(NSURL*) url {
-    NSPoint point = NSZeroPoint;
++ (CGPoint) pointWithDataURL:(NSURL*) url {
+    CGPoint point = CGPointZero;
     if ([url.scheme isEqualToString:ILDataURLScheme]) {
         NSScanner* URIscanner = [NSScanner scannerWithString:url.absoluteString];
         NSString* contentEncoding = nil;
@@ -135,7 +135,7 @@ NSString* const ILDataURLBase64Encoding = @"base64";
         [URIscanner scanDouble:&x];
         [URIscanner scanString:@"," intoString:nil];
         [URIscanner scanDouble:&y];
-        point = NSMakePoint(x, y);
+        point = CGPointMake(x, y);
     }
 
     return point;

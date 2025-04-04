@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -69,7 +70,7 @@ extern NSString* const ILDataURLBase64Encoding;
 /// @returns the `CGPoint` from an RFC 2397 `data:`
 /// @param url with an `x-type/point` content type;
 /// or {0,0}
-+ (NSPoint) pointWithDataURL:(NSURL*) url;
++ (CGPoint) pointWithDataURL:(NSURL*) url;
 
 /// @returns an RFC 2397 `data:` URL with the provided
 /// @param size as an `x-type/size` two tupe with the height and width values
