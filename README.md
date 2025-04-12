@@ -10,9 +10,6 @@ From [iStumbler Labs](https://istumbler.net/labs/).
 
 - [Goals](#goals)
 - [Support](#support)
-- [Classes](#classes)
-- [Functions](#functions)
-- [Protocols](#protocols)
 - [Categories](#categories)
 - [Swift](#swift)
 - [Model Controller Multiple Views](#mcmv)
