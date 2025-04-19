@@ -60,6 +60,7 @@ extern NSString* const ILDataURLBase64Encoding;
 
 /// @returns the `NSTimeInterval` from an RFC 2397 `data:`
 /// @param url provided it has an `x-type/epoch-interval` content type
+/// @param interval out-param for the interval value
 + (nullable NSDate*) dateWithDataURL:(NSURL*) url interval:(NSTimeInterval*) interval;
 
 /// @returns an RFC 2397 `data:` URL with the provided

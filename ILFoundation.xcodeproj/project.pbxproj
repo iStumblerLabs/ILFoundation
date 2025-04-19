@@ -17,7 +17,6 @@
 		7582F6722D3F642F008588DD /* NSData+ILFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7582F65E2D3F5759008588DD /* NSData+ILFoundation.m */; };
 		7582F6732D3F642F008588DD /* NSString+ILFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CB08872C9A859000B83BC3 /* NSString+ILFoundation.m */; };
 		7582F6742D3F642F008588DD /* NSURL+ILFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CB088C2C9A8E7600B83BC3 /* NSURL+ILFoundation.m */; };
-		7582F6762D3F642F008588DD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7582F6662D3F59C3008588DD /* Foundation.framework */; };
 		75DA661B2C9BA4C500933174 /* ILFoundationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DA661A2C9BA4C500933174 /* ILFoundationTests.swift */; };
 		75EEF6B12D638D1100B2EE80 /* Data+ILFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EEF6A02D638C0D00B2EE80 /* Data+ILFoundation.swift */; };
 		75EEF6BA2D63925100B2EE80 /* ILFoundationSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EEF6B92D63924B00B2EE80 /* ILFoundationSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -49,8 +48,6 @@
 		757170A92D59B093001D8FCA /* ILHashable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILHashable.h; sourceTree = "<group>"; };
 		7582F65A2D3F574E008588DD /* NSData+ILFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+ILFoundation.h"; sourceTree = "<group>"; };
 		7582F65E2D3F5759008588DD /* NSData+ILFoundation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+ILFoundation.m"; sourceTree = "<group>"; };
-		7582F6642D3F59A9008588DD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		7582F6662D3F59C3008588DD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS18.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		7582F67B2D3F642F008588DD /* ILFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ILFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75CB08832C9A857500B83BC3 /* NSString+ILFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+ILFoundation.h"; sourceTree = "<group>"; };
 		75CB08872C9A859000B83BC3 /* NSString+ILFoundation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+ILFoundation.m"; sourceTree = "<group>"; };
@@ -68,7 +65,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7582F6762D3F642F008588DD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +92,6 @@
 				7503F6322C7672C200B8CFC9 /* Package.swift */,
 				7503F6302C7672B000B8CFC9 /* Sources */,
 				7503F63D2C76732E00B8CFC9 /* Products */,
-				7503F6BF2C7699D700B8CFC9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -143,15 +138,6 @@
 				75EEF6A92D638CFB00B2EE80 /* ILFoundationSwift.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		7503F6BF2C7699D700B8CFC9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7582F6662D3F59C3008588DD /* Foundation.framework */,
-				7582F6642D3F59A9008588DD /* Foundation.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		75B927F42D638BD200C567DC /* ILFoundationSwift */ = {
@@ -273,7 +259,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					7582F6692D3F642F008588DD = {
 						LastSwiftMigration = 1620;
@@ -779,6 +765,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -852,6 +839,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
