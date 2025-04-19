@@ -12,7 +12,6 @@ From [iStumbler Labs](https://istumbler.net/labs/).
 - [Support](#support)
 - [Categories](#categories)
 - [Swift](#swift)
-- [Model Controller Multiple Views](#mcmv)
 - [To Do Items](#todo)
 - [Version History](#versions)
 - [MIT License](#license)
@@ -26,6 +25,7 @@ and adds `ILHashable` and `ILHashingInputStream` for calculating hashs on Data a
 
 ILFoundation supports the [CardView](https://github.com/iStumblerLabs/CardView) and 
 [Soup](https://github.com/iStumblerLabs/Soup) frameworks.
+
 
 ## Support ILFoundation! <a id="support"></a>
 
@@ -58,18 +58,37 @@ Categories are defined on Foundation classes to provide extensions for text proc
   
 - [`NSURL+ILFoundation`](./Sources/ILFoundation/include/NSURL+ILFoundation.h) Adds methods for working with [RFC 2397](https://www.rfc-editor.org/rfc/rfc2397) `data:` URLs:
   - Adds: `+dataURLWithData:` and `+dataURLwithData:mediaType:parameters:contentEncoding:` for genrating `data:` URLs
-  - Adds: `+URLWithUTTypeData:` for generating `data:` URLs from pasteboard data with UTType `public.url`
   - Adds: `-URLData` and `-URLDataWithMediaType:parameters:contentEncoding:` for parsing `data:` URLs
       - Supports `utf8`, `hex`, and `base64` encodings
+  - Adds `Data:x-type/...` URLs for:
+    - Date - `+dataURLWithDate:` and `+dateWithDataURL:` 
+    - Intervals - `+dataURLWithDate:interval:` and `+dateWithDataURL:interval:` 
+    - Points - `+dataURLWithPoint:` and `+pointWithDataURL:`
+    - Sizes - `+dataURLWithSize:` and `+sizeWithDataURL:`
+    - Rects - `+dataURLWithRect:` and `+rectWithDataURL:`
+    - Ranges - `+dataURLWithRange:` and `+rangeWithDataURL:`
+    - Vectors - `+dataURLWithVector:` and `+vectorWithDataURL:`
+    - Measures - `+dataURLWithMeasure:` and `+measureWithDataURL:`
+    - Regex - `+dataURLWithRegex:` and `+regexWithDataURL:`
+  - Adds `+URNWithUUID:` and `+UUIDWithURL:` for UUID URNs
+  - Adds: `+URLWithUTTypeData:` for unpacking URLs from pasteboard data with UTType `public.url`
 
 
 ## To Do Items <a id="todo"></a>
 
 - implement ILHashingOutputStream
 - implement SHA3 and Skein Hash functions
+- implement `+dataURLWithPredicate:`... and `+dataURLWithSort:`... in NSURL
+
 
 ## Version History <a id="versions"></a>
 
+- ILFoundation `1.1.0`: 20 April 2025
+    - Added UTF8 Error detection and correction code from [Athenstean](https://athenstean.com/blog/detecing-fixing-encoding-problems-nsstring/)
+    - Improved Swift Interface <- this is a breaking change, but the major version is not incremented
+    - Adds `Data:x-type/...` URLs for Date, Intervals, Points, Sizes, Rects, Ranges, Vectors, Measures, and Regex objects
+    - Adds UUID URNs
+    - Fixes iOS build by removing NSPoint
 - ILFoundation `1.0`: 26 February 2025
     - Forked from KitBridge, added NSData hash code functions
 
@@ -80,7 +99,7 @@ Categories are defined on Foundation classes to provide extensions for text proc
   near or inside your application's project directory
 - Drag `ILFoundation.xcodproj` into your project
 - include the `ILFoundation.framework` in your applications `Resources/Frameworks` directory
-    - link the appropriate version of `ILFoundation.framework` to all the targets which it
+    - link the appropriate version of `ILFoundation.framework` to all the targets which use it
 
 
 ## Swift Package <a id="spm"></a>
