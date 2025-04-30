@@ -350,7 +350,7 @@ NSString* const ILDataURLBase64Encoding = @"base64";
 
 + (NSURL*) URLWithUTTypeData:(NSData*)UTTypeData {
     NSURL* dataURL = nil;
-#if TARGET_OS_MAC
+#if OSX
     dataURL = [NSURL URLWithDataRepresentation:UTTypeData relativeToURL:nil];
 #elif TARGET_OS_IOS
     NSPropertyListFormat plistFormat;
