@@ -153,7 +153,7 @@ extern NSString* const ILDataURLBase64Encoding;
 
 /// @returns the `NSUUID` from a `urn:uuid:`
 /// @param uuidURN provided
-+ (NSUUID*) UUIDWithURL:(NSURL*) uuidURN;
++ (nullable NSUUID*) UUIDWithURL:(NSURL*) uuidURN;
 
 // MARK: - UTType Data URLs
 

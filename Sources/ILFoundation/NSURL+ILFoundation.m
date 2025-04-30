@@ -333,7 +333,7 @@ NSString* const ILDataURLBase64Encoding = @"base64";
     return [NSURL URLWithString:[NSString stringWithFormat:@"urn:uuid:%@", uuid.UUIDString]];
 }
 
-+ (NSUUID*) UUIDWithURL:(NSURL*) uuidURN {
++ (nullable NSUUID*) UUIDWithURL:(NSURL*) uuidURN {
     NSUUID* uuid = nil;
 
     NSArray* urnComponents = [uuidURN.absoluteString componentsSeparatedByString:@":"];
