@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// lowercase hex string representing this data
 @property(nonatomic,readonly) NSString* hexString;
+@property(nonatomic,readonly) BOOL isBinaryPlistData;
 
 @end
 

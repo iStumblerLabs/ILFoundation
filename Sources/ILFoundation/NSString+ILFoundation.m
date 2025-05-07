@@ -161,7 +161,7 @@ NSString* const ILUTF32LEMagic = @"data:;hex,FFFE0000";
 
 - (nullable instancetype) initWithData:(NSData*) data {
     NSString* decoded = nil;
-    NSStringEncoding encoding = [NSString stringEncodingOfData:data convertedString:&decoded];
+    /* NSStringEncoding encoding = */ [NSString stringEncodingOfData:data convertedString:&decoded];
     if (decoded) {
         self = [self initWithString:decoded];
     }

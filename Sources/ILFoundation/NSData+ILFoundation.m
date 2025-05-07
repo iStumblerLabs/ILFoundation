@@ -2,6 +2,7 @@
 
 #include "NSData+ILFoundation.h"
 #include "NSString+ILFoundation.h"
+#include "NSURL+ILFoundation.h"
 
 // TODO: if the data size is greater than a given threshold, use the stream-based hash functions
 
@@ -9,6 +10,13 @@
 
 - (NSString*) hexString {
     return [NSString hexStringWithData:self];
+}
+
+- (BOOL) isBinaryPlistData {
+    return ([self rangeOfData:[NSURL URLWithString:@"data:;hex,62706C6973743030"].URLData
+                      options:NSDataSearchAnchored
+                        range:NSMakeRange(0, [self length])].location == 0); // it's bplist
+
 }
 
 // MARK: - Message Digests
