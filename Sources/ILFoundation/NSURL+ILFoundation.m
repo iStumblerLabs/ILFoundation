@@ -352,7 +352,7 @@ NSString* const ILDataURLBase64Encoding = @"base64";
     NSURL* dataURL = nil;
 #if OSX
     dataURL = [NSURL URLWithDataRepresentation:UTTypeData relativeToURL:nil];
-#elif TARGET_OS_IOS
+#else
     NSPropertyListFormat plistFormat;
     NSError* plistError = nil;
     id plist = [NSPropertyListSerialization propertyListWithData:UTTypeData

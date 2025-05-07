@@ -25,13 +25,19 @@ extern NSString* const ILUTF32LEMagic;
 
 @interface NSString (ILFoundation)
 
++ (NSStringEncoding) stringEncodingOfData:(NSData*) data convertedString:(NSString*_Nullable*_Nullable) string;
+
 /// @returns the NSStringEncoding based on the magic number of the
 /// @param data provided or NSStringEncodingUn
 + (NSStringEncoding) UTFEncodingOfData:(NSData*) data;
 
 /// @returns a string from any type of UTF data by auto-detecting the encoding of the
 /// @param data provided
-+ (NSString*) stringWithUTFData:(NSData*) data;
++ (nullable NSString*) stringWithUTFData:(NSData*) data;
+
+/// @returns a string decoded from NS/UIPasteboard data with the UTType `public.url`
+/// @param UTTypeData data from a pasteboard with the UTType `public.url`
++ (nullable NSString*) stringWithUTTypeData:(NSData*)UTTypeData;
 
 /// @returns a hexadecimal string representation of the
 /// @param data provided
@@ -39,9 +45,13 @@ extern NSString* const ILUTF32LEMagic;
 
 // MARK: -
 
+///
+///
+- (nullable instancetype) initWithData:(NSData*) data;
+
 /// @returns a new string by auto-detecting the UTF encoding in the
 /// @param data provided,
-- (instancetype) initWithUTFData:(NSData*) data;
+- (nullable instancetype) initWithUTFData:(NSData*) data;
 
 /// @returns a hexstring with the
 /// @param data provided
@@ -58,7 +68,7 @@ extern NSString* const ILUTF32LEMagic;
 // MARK: -
 
 /// @returns a new data object with the
-/// @param UTFEncoding specified including the BOM
+/// @param UTFEncoding specified, including the BOM
 - (NSData*) dataWithByteOrderUTFEncoding:(NSStringEncoding)UTFEncoding;
 
 /// @returns an array of substrings with a

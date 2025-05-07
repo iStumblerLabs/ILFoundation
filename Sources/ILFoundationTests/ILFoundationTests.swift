@@ -259,7 +259,7 @@ final class ILFoundationTests: XCTestCase {
 
     // test basic data URL creation
     func testDataURLWithData() throws {
-        if let exampleData: Data = "testDataURLWithData()".data(using: String.Encoding.utf8) {
+        if let exampleData: Data = "testDataURLWithData()".data(using: .utf8) {
             let testURL: URL = NSURL.dataURL(with: exampleData)
             NSLog("testDataURLWithData: \(testURL)")
             XCTAssertNotNil(testURL, "testURL is not null")
@@ -532,6 +532,10 @@ final class ILFoundationTests: XCTestCase {
 
         let decoded = NSString(data: utf32LEData, encoding: String.Encoding.utf32LittleEndian.rawValue)
         XCTAssertNotNil(decoded, "utf32LEData decoded is not nil")
+    }
+
+    func testUTFAutoDetectInit() throws {
+
     }
 
     // MARK: - UTF8 Error Detection and Correction

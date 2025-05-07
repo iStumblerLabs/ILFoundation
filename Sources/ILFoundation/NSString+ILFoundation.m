@@ -1,5 +1,6 @@
 #import "NSString+ILFoundation.h"
 #import "NSURL+ILFoundation.h"
+#import "NSData+ILFoundation.h"
 
 // MARK: UTF Magic Numbers
 
@@ -92,27 +93,17 @@ NSString* const ILUTF32LEMagic = @"data:;hex,FFFE0000";
     return encoding;
 }
 
-+ (NSStringEncoding) UTFEncodingOfData:(NSData*) data convertedString:(NSString*_Nullable*) string {
++ (NSStringEncoding) stringEncodingOfData:(NSData*) data convertedString:(NSString*_Nullable*) string {
     static NSDictionary* options;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         options = @{
-            NSStringEncodingDetectionAllowLossyKey: @(NO),
-            NSStringEncodingDetectionSuggestedEncodingsKey: @[
-                @(NSUTF8StringEncoding),
-                @(NSUTF16StringEncoding),
-                @(NSUTF16BigEndianStringEncoding),
-                @(NSUTF16LittleEndianStringEncoding),
-                @(NSUTF32StringEncoding),
-                @(NSUTF32BigEndianStringEncoding),
-                @(NSUTF32LittleEndianStringEncoding)
-            ],
-            NSStringEncodingDetectionUseOnlySuggestedEncodingsKey: @(YES)
+            NSStringEncodingDetectionAllowLossyKey: @(YES)
         };
     });
 
     NSStringEncoding detectedEncoding = [NSString stringEncodingForData:data encodingOptions:options convertedString:string usedLossyConversion:nil];
-    if (detectedEncoding == NSUTF16StringEncoding) {
+    if (detectedEncoding == NSUTF16StringEncoding) { // check endianess
         if ([data rangeOfData:[self magicForUTFEncoding:NSUTF16BigEndianStringEncoding] options:0 range:NSMakeRange(0, data.length)].location == 0) {
             detectedEncoding = NSUTF16BigEndianStringEncoding;
         }
@@ -120,7 +111,7 @@ NSString* const ILUTF32LEMagic = @"data:;hex,FFFE0000";
             detectedEncoding = NSUTF16LittleEndianStringEncoding;
         }
     }
-    else if (detectedEncoding == NSUTF32StringEncoding) {
+    else if (detectedEncoding == NSUTF32StringEncoding) { // check endianess
         if ([data rangeOfData:[self magicForUTFEncoding:NSUTF32BigEndianStringEncoding] options:0 range:NSMakeRange(0, data.length)].location == 0) {
             detectedEncoding = NSUTF32BigEndianStringEncoding;
         }
@@ -133,7 +124,22 @@ NSString* const ILUTF32LEMagic = @"data:;hex,FFFE0000";
 }
 
 + (NSString*) stringWithUTFData:(NSData*) data {
-    return [NSString.alloc initWithData:data encoding:[self UTFEncodingOfData:data]];
+    NSStringEncoding encoding = [self UTFEncodingOfData:data];
+    return [NSString.alloc initWithData:data encoding:encoding];
+}
+
++ (nullable NSString*) stringWithUTTypeData:(NSData*)UTTypeData {
+    NSString* dataString = nil;
+    NSPropertyListFormat plistFormat;
+    NSError* plistError = nil;
+    id plist = [NSPropertyListSerialization propertyListWithData:UTTypeData
+                                                         options:NSPropertyListImmutable
+                                                          format:&plistFormat
+                                                           error:&plistError];
+    dataString = [plist[@"$objects"] lastObject]; // little ugly, this is an NSKeyedArciver plist
+    
+    return dataString;
+
 }
 
 + (NSString*) hexStringWithData:(NSData*) data {
@@ -153,7 +159,20 @@ NSString* const ILUTF32LEMagic = @"data:;hex,FFFE0000";
 
 // MARK: - Initilizers
 
-- (instancetype) initWithUTFData:(NSData*) data {
+- (nullable instancetype) initWithData:(NSData*) data {
+    NSString* decoded = nil;
+    NSStringEncoding encoding = [NSString stringEncodingOfData:data convertedString:&decoded];
+    if (decoded) {
+        self = [self initWithString:decoded];
+    }
+    else {
+        self = [self initWithString:data.hexString];
+    }
+
+    return self;
+}
+
+- (nullable instancetype) initWithUTFData:(NSData*) data {
     return [self initWithString:[NSString stringWithUTFData:data]];
 }
 
