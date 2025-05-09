@@ -130,14 +130,24 @@ NSString* const ILUTF32LEMagic = @"data:;hex,FFFE0000";
 
 + (nullable NSString*) stringWithUTTypeData:(NSData*)UTTypeData {
     NSString* dataString = nil;
-    NSPropertyListFormat plistFormat;
-    NSError* plistError = nil;
-    id plist = [NSPropertyListSerialization propertyListWithData:UTTypeData
-                                                         options:NSPropertyListImmutable
-                                                          format:&plistFormat
-                                                           error:&plistError];
-    dataString = [plist[@"$objects"] lastObject]; // little ugly, this is an NSKeyedArciver plist
-    
+    if (UTTypeData.isBinaryPlistData) {
+        NSPropertyListFormat plistFormat;
+        NSError* plistError = nil;
+        id plist = [NSPropertyListSerialization propertyListWithData:UTTypeData
+                                                             options:NSPropertyListImmutable
+                                                              format:&plistFormat
+                                                               error:&plistError];
+        if ([plist isKindOfClass:NSDictionary.class]) {
+            dataString = [plist[@"$objects"] lastObject]; // little ugly, this is an NSKeyedArciver plist
+        }
+        else if ([plist isKindOfClass:NSArray.class]) {
+            dataString = [plist firstObject]; // maybe look for a string in the array and return the first?
+        }
+    }
+    else {
+        dataString = [NSString.alloc initWithData:UTTypeData];
+    }
+
     return dataString;
 
 }
